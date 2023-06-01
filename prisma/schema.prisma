@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:ihsan123@localhost:3306/xpos"
+}
+
+model tblcategory {
+  Id           Int       @id
+  NameCategory String?   @db.VarChar(255)
+  Description  String?   @db.VarChar(255)
+  IsDelete     Boolean?
+  CreateBy     String?   @db.VarChar(255)
+  CreatedDate  DateTime? @db.DateTime(0)
+  UpdateBy     String?   @db.VarChar(255)
+  UpdateDate   DateTime? @db.DateTime(0)
+}
+
+model tblproduct {
+  Id          Int       @id
+  NameProduct String?   @db.VarChar(255)
+  Price       Float?    @db.Float
+  Stock       String?   @db.VarChar(255)
+  IdVariant   Int?
+  Image       String?   @db.VarChar(255)
+  IsDelete    Boolean?
+  CreateBy    String?   @db.VarChar(255)
+  CreatedDate DateTime? @db.DateTime(0)
+  UpdateBy    String?   @db.VarChar(255)
+  UpdateDate  DateTime? @db.DateTime(0)
+}
+
+model tblvariant {
+  Id          Int       @id
+  IdCategory  String?   @db.VarChar(255)
+  NameVariant String?   @db.VarChar(255)
+  Description String?   @db.VarChar(255)
+  IsDelete    Boolean?
+  CreateBy    String?   @db.VarChar(255)
+  CreatedDate DateTime? @db.DateTime(0)
+  UpdateBy    String?   @db.VarChar(255)
+  UpdateDate  DateTime? @db.DateTime(0)
+}
