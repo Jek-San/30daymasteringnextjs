@@ -1,15 +1,16 @@
 import Modal from "@/component/Modal"
-import { Category, Variant } from "@/interfaces/interfaces"
+import { tblvariant } from "@prisma/client"
 import { error } from "console"
 import { GetServerSideProps, NextPage } from "next"
 import { useRouter } from "next/router"
 import { EventHandler, useEffect, useState } from "react"
 interface FormValues {
-  IdCategory: string
-  nameVariant: string
-  Description: string
-  Id: string
+  IdCategory: string | null
+  nameVariant: string | null
+  Description: string | null
+  Id: string | null
 }
+interface Variant extends tblvariant {}
 interface VariantPageProps {
   variant: Variant
 }
@@ -78,7 +79,7 @@ const CategoryPage: NextPage<VariantPageProps> = ({ variant }) => {
             id="Id"
             name="Id"
             type="text"
-            value={formValues.Id}
+            value={formValues.Id ?? ""}
             onChange={handleInputChange}
           />
         </div>
@@ -94,7 +95,7 @@ const CategoryPage: NextPage<VariantPageProps> = ({ variant }) => {
             id="IdCategory"
             name="IdCategory"
             type="text"
-            value={formValues.IdCategory}
+            value={formValues.IdCategory ?? ""}
             onChange={handleInputChange}
           />
         </div>
@@ -111,7 +112,7 @@ const CategoryPage: NextPage<VariantPageProps> = ({ variant }) => {
             name="nameVariant"
             type="text"
             placeholder=""
-            value={formValues.nameVariant}
+            value={formValues.nameVariant ?? " "}
             onChange={handleInputChange}
           />
         </div>
@@ -128,7 +129,7 @@ const CategoryPage: NextPage<VariantPageProps> = ({ variant }) => {
             type="text"
             name="Description"
             placeholder=""
-            value={formValues.Description}
+            value={formValues.Description ?? " "}
             onChange={handleInputChange}
           />
         </div>

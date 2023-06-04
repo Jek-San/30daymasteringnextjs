@@ -1,9 +1,9 @@
 import Table from "@/component/table/Table"
 import { GetStaticProps } from "next"
 import { FC } from "react"
-import { Category } from "../../interfaces/interfaces"
+import { tblcategory } from "@prisma/client"
 import Link from "next/link"
-
+interface Category extends tblcategory {}
 interface pageProps {
   categories: Category[]
 }

@@ -12,7 +12,7 @@ export default async function handler(
     const { Id } = req.query
 
     if (Id) {
-      const variantId = parseInt(Id as string)
+      const variantId = String(Id)
 
       try {
         const variant = await prisma.tblvariant.findUnique({
@@ -38,18 +38,18 @@ export default async function handler(
   } else if (req.method === "POST") {
     try {
       const { IdCategory, NameVariant, Description } = req.body
+      const categoryId = String(IdCategory)
 
       const variant = await prisma.tblvariant.create({
         data: {
-          IdCategory,
+          IdCategory: categoryId,
           NameVariant,
           Description,
           CreateBy: "Admin",
-          IsDelete: false,
+
           UpdateDate: new Date(),
         },
       })
-
       res.status(201).json(variant)
     } catch (error) {
       console.error(error)
@@ -57,12 +57,11 @@ export default async function handler(
     }
   } else if (req.method === "PUT") {
     try {
-      console.log(req.body)
       const { Id, IdCategory, nameVariant, Description } = req.body
 
       const updatedVariant = await prisma.tblvariant.update({
         where: {
-          Id: Number(Id),
+          Id: String(Id),
         },
         data: {
           IdCategory,
@@ -86,7 +85,7 @@ export default async function handler(
 
       const deletedVariant = await prisma.tblvariant.delete({
         where: {
-          Id: variantId,
+          Id: String(variantId),
         },
       })
 

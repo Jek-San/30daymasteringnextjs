@@ -13,7 +13,7 @@ export default async function handler(
 
     try {
       const variant = await prisma.tblvariant.findUnique({
-        where: { Id: variantId },
+        where: { Id: String(variantId) },
       })
 
       if (variant) {

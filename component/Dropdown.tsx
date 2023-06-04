@@ -1,28 +1,41 @@
-import { FC, useEffect, useState } from "react"
+import React, { FC } from "react"
 
-interface DropdownProps {
-  handleSelectCategory: any
-  datas: any[]
-  selectedCategory: number
+interface DropdownProps<T> {
+  handleSelect: (selectedValue: T) => void
+  data: T[]
+  selectedValue: T | null
+  displayProperty: keyof T
+  valueProperty: keyof T
 }
 
-const Dropdown: FC<DropdownProps> = ({
-  handleSelectCategory,
-  datas,
-  selectedCategory,
-}) => {
+const Dropdown = <T extends object>({
+  handleSelect,
+  data,
+  selectedValue,
+  displayProperty,
+  valueProperty,
+}: DropdownProps<T>) => {
   return (
     <select
       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-      id="IdCategory"
-      name="IdCategory"
-      value={selectedCategory}
-      onChange={(e) => handleSelectCategory(Number(e.target.value))}
+      value={selectedValue ? String(selectedValue[valueProperty]) : ""}
+      onChange={(e) => {
+        const selectedItemId = e.target.value
+        const selectedItem = data.find(
+          (item) => String(item[valueProperty]) === selectedItemId
+        )
+        if (selectedItem) {
+          handleSelect(selectedItem)
+        }
+      }}
     >
-      <option value="">Select a category</option>
-      {datas.map((data) => (
-        <option key={data.Id} value={data.Id}>
-          {data.NameCategory}
+      <option value="">Select an option</option>
+      {data.map((item) => (
+        <option
+          key={item[valueProperty] as any}
+          value={item[valueProperty] as any}
+        >
+          {item[displayProperty]}
         </option>
       ))}
     </select>

@@ -2,35 +2,29 @@ import Dropdown from "@/component/Dropdown"
 import { NextPage } from "next"
 import { useRouter } from "next/router"
 import { useState, useEffect } from "react"
+import { tblcategory } from "@prisma/client"
 
 interface FormValues {
   IdCategory: number
-  nameVariant: string
+  NameVariant: string
   Description: string
-  Id: string
 }
+interface Category extends tblcategory {}
 
-interface Category {
-  Id: number
-  NameCategory: string
-  Description: string
-  IsDelete: boolean
-  CreateBy: string
-  CreatedDate: string
-  UpdateBy: string
-  UpdateDate: string
+interface CreateProps {
+  handleSelectCategory: (selectedValue: Category) => void
+  selectedCategory: Category | null
 }
-
-interface CreateProps {}
 
 const VariantPage: NextPage<CreateProps> = ({}) => {
   const router = useRouter()
-  const [selectedCategory, setSelectedCategory] = useState<number>(0)
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  )
   const [categories, setCategories] = useState<Category[]>([])
   const [formValues, setFormValues] = useState<FormValues>({
-    Id: "",
     IdCategory: 0,
-    nameVariant: "",
+    NameVariant: "",
     Description: "",
   })
 
@@ -59,7 +53,7 @@ const VariantPage: NextPage<CreateProps> = ({}) => {
         // Handle successful form submission
         console.log("Post created successfully!")
         // Redirect to the home page
-        router.push("/variants")
+        router.push("/variant")
         // You can also use router.replace("/") if you want to replace the current history entry
       } else {
         // Handle error case
@@ -71,12 +65,20 @@ const VariantPage: NextPage<CreateProps> = ({}) => {
     }
   }
 
-  const handleSelectCategory = (categoryId: number) => {
-    setSelectedCategory(categoryId)
+  // const handleSelectCategory = (categoryId: number) => {
+  //   setSelectedCategory(categoryId)
+  //   setFormValues((prevValues) => ({
+  //     ...prevValues,
+  //     IdCategory: categoryId,
+  //   }))
+  // }
+  const handleSelectCategory = (selectedValue: Category) => {
+    setSelectedCategory(selectedValue)
     setFormValues((prevValues) => ({
       ...prevValues,
-      IdCategory: categoryId,
+      IdCategory: selectedValue.Id,
     }))
+    console.log(formValues)
   }
 
   useEffect(() => {
@@ -96,7 +98,7 @@ const VariantPage: NextPage<CreateProps> = ({}) => {
   return (
     <div className="w-auto flex justify-center">
       <form
-        method="PUT"
+        method="POST"
         className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
       >
         {/* Form fields */}
@@ -107,10 +109,12 @@ const VariantPage: NextPage<CreateProps> = ({}) => {
           >
             Category
           </label>
-          <Dropdown
-            datas={categories}
-            handleSelectCategory={handleSelectCategory}
-            selectedCategory={selectedCategory}
+          <Dropdown<Category>
+            data={categories}
+            handleSelect={handleSelectCategory}
+            selectedValue={selectedCategory}
+            displayProperty="NameCategory"
+            valueProperty="Id"
           />
         </div>
         <div className="mb-4">
@@ -122,10 +126,10 @@ const VariantPage: NextPage<CreateProps> = ({}) => {
           </label>
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="nameVariant"
-            name="nameVariant"
+            id="NameVariant"
+            name="NameVariant"
             type="text"
-            value={formValues.nameVariant}
+            value={formValues.NameVariant}
             onChange={handleInputChange}
           />
         </div>

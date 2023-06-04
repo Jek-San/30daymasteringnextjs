@@ -15,7 +15,7 @@ const Table: React.FC<TableProps> = ({ url }) => {
   const [columns, setColumns] = useState<TableColumn[]>([])
   const fetchData = async () => {
     try {
-      const response = await fetch(`api/${url}`)
+      const response = await fetch(`${url}`)
       const data = await response.json()
       setData(data)
     } catch (error) {
@@ -34,6 +34,7 @@ const Table: React.FC<TableProps> = ({ url }) => {
         .filter(
           (key) =>
             key !== "IsDelete" &&
+            key !== "Id" &&
             key !== "CreatedDate" &&
             key !== "CreateBy" &&
             key !== "CreatedDate" &&

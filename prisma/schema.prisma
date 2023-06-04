@@ -25,7 +25,7 @@ model tblproduct {
   Stock       String?   @db.VarChar(255)
   IdVariant   Int?
   Image       String?   @db.VarChar(255)
-  IsDelete    Boolean?
+  IsDelete    Boolean?  
   CreateBy    String?   @db.VarChar(255)
   CreatedDate DateTime? @db.DateTime(0)
   UpdateBy    String?   @db.VarChar(255)
@@ -33,7 +33,7 @@ model tblproduct {
 }
 
 model tblvariant {
-  Id          Int       @id @default(autoincrement())
+ Id          String    @id @default(uuid())
   IdCategory  String?   @db.VarChar(255)
   NameVariant String?   @db.VarChar(255)
   Description String?   @db.VarChar(255)
