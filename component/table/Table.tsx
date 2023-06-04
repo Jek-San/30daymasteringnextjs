@@ -13,18 +13,18 @@ const Table: React.FC<TableProps> = ({ url }) => {
   const router = useRouter()
   const [data, setData] = useState<any[]>([])
   const [columns, setColumns] = useState<TableColumn[]>([])
-  const fetchCategories = async () => {
+  const fetchData = async () => {
     try {
-      const response = await fetch(url)
-      const categories = await response.json()
-      setData(categories)
+      const response = await fetch(`api/${url}`)
+      const data = await response.json()
+      setData(data)
     } catch (error) {
       console.error("Failed to fetch categories", error)
     }
   }
 
   useEffect(() => {
-    fetchCategories()
+    fetchData()
   }, [])
 
   useEffect(() => {
@@ -53,7 +53,7 @@ const Table: React.FC<TableProps> = ({ url }) => {
     try {
       // Make API request to create a new post using the formData
 
-      const response = await fetch(`/api/category?id=${id}`, {
+      const response = await fetch(`/api${url}?id=${id}`, {
         method: "DELETE",
 
         headers: {
@@ -108,7 +108,7 @@ const Table: React.FC<TableProps> = ({ url }) => {
                   <td className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
                     <button
                       onClick={() => {
-                        router.push(`/category/${item.Id}`)
+                        router.push(`${url}/${item.Id}`)
                       }}
                     >
                       <div className="btn btn-blue  text-green-500 hover:text-green-700">
