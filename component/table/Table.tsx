@@ -9,13 +9,13 @@ interface TableColumn {
 interface TableProps {
   url: string
 }
-const Table: React.FC<TableProps> = ({ url }) => {
+const Table: React.FC<TableProps> = ({ url,  }) => {
   const router = useRouter()
   const [data, setData] = useState<any[]>([])
   const [columns, setColumns] = useState<TableColumn[]>([])
   const fetchData = async () => {
     try {
-      const response = await fetch(`${url}`)
+      const response = await fetch(`api/${url}`)
       const data = await response.json()
       setData(data)
     } catch (error) {

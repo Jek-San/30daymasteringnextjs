@@ -1,23 +1,28 @@
-import Modal from "@/component/Modal"
-import { tblvariant, tblcategory, tblproduct } from "@prisma/client"
-import { error } from "console"
-import { GetServerSideProps, NextPage } from "next"
+import Dropdown from "@/component/Dropdown"
+import { NextPage } from "next"
 import { useRouter } from "next/router"
-import { EventHandler, useEffect, useState } from "react"
+import { useState, useEffect } from "react"
+import { tblproduct, tblcategory, tblvariant } from "@prisma/client"
 
-interface FormValues extends tblproduct {}
+interface FormValues extends tblproduct {
+  ImagePath?: File | null
+}
+interface Category extends tblcategory {}
 
-interface Variant extends tblvariant {}
-interface ProductPageProps {
-  product: tblproduct
+interface CreateProps {
+  handleSelectCategory: (selectedValue: Category) => void
+  selectedCategory: Category | null
 }
 
-const CategoryPage: NextPage<ProductPageProps> = ({ product }) => {
+const VariantPage: NextPage<CreateProps> = ({}) => {
   const router = useRouter()
-
+  const [selectedVariant, setSelectedVariant] = useState<tblvariant | null>(
+    null
+  )
+  const [variant, setVariant] = useState<tblvariant[]>([])
   const [formValues, setFormValues] = useState<FormValues>({
-    Id: product.Id,
-    NameProduct: product.NameProduct,
+    Id: "",
+    NameProduct: "",
     IdVariant: 0,
     Image: "",
     Price: 0,
@@ -27,6 +32,7 @@ const CategoryPage: NextPage<ProductPageProps> = ({ product }) => {
     CreateBy: "",
     CreatedDate: new Date(),
     IsDelete: false,
+    ImagePath: null,
   })
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,22 +45,23 @@ const CategoryPage: NextPage<ProductPageProps> = ({ product }) => {
 
   const submitForm = async (e: any) => {
     e.preventDefault()
-    console.log("test")
+
     try {
       // Make API request to create a new post using the formData
       console.log(JSON.stringify(formValues))
-      const response = await fetch("/api/product", {
-        method: "PUT",
+      const response = await fetch("/api/variant", {
+        method: "POST",
         body: JSON.stringify(formValues),
         headers: {
           "Content-Type": "application/json",
         },
       })
-      console.log(formValues)
       if (response.ok) {
         // Handle successful form submission
-        console.log("Post Edit successfully!")
-        // Redirect or perform any necessary actions
+        console.log("Post created successfully!")
+        // Redirect to the home page
+        router.push("/variant")
+        // You can also use router.replace("/") if you want to replace the current history entry
       } else {
         // Handle error case
         console.error("Failed to create post")
@@ -65,102 +72,129 @@ const CategoryPage: NextPage<ProductPageProps> = ({ product }) => {
     }
   }
 
+  // const handleSelectCategory = (categoryId: number) => {
+  //   setSelectedCategory(categoryId)
+  //   setFormValues((prevValues) => ({
+  //     ...prevValues,
+  //     IdCategory: categoryId,
+  //   }))
+  // }
+  // const handleSelectCategory = (selectedValue: tblvariant) => {
+  //   setSelectedVariant(selectedValue)
+  //   setFormValues((prevValues) => ({
+  //     ...prevValues,
+  //     IdVariant: parseInt(selectedValue.Id),
+  //   }))
+  //   console.log(formValues)
+  // }
+
+  useEffect(() => {
+    const fetchVariants = async () => {
+      try {
+        const response = await fetch("/api/variant")
+        const data = await response.json()
+        setVariant(data)
+      } catch (error) {
+        console.error("Failed to fetch categories", error)
+      }
+    }
+
+    fetchVariants()
+  }, [])
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const imageFile = e.target.files[0]
+      setFormValues((prevValues) => ({
+        ...prevValues,
+        ImagePath: imageFile,
+      }))
+      console.log(formValues)
+    }
+  }
+
   return (
-    <div className="w-auto flex justify-center ">
+    <div className="w-auto flex justify-center">
       <form
-        method="PUT"
+        method="POST"
         className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
       >
-        <div className="mb-4" hidden>
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="Id"
-          >
-            IdVariant
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="Id"
-            name="Id"
-            type="text"
-            value={formValues.Id ?? ""}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className="mb-4" hidden>
+        {/* Form fields */}
+        {/* <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="IdVariant"
           >
-            IdVariant
+            Variant
           </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="IdVariant"
-            name="IdVariant"
-            type="text"
-            value={formValues.IdVariant ?? ""}
-            onChange={handleInputChange}
+          <Dropdown<tblvariant>
+            data={variant}
+            handleSelect={handleSelectCategory}
+            selectedValue={selectedVariant}
+            displayProperty="Id"
+            valueProperty="NameVariant"
           />
-        </div>
+        </div> */}
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="NameProduct"
           >
-            Name Product
+            Name Variant
           </label>
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="NameProduct"
             name="NameProduct"
             type="text"
-            placeholder=""
-            value={formValues.NameProduct ?? " "}
-            onChange={handleInputChange}
-          />
-        </div>
-        <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="Price"
-          >
-            Price
-          </label>
-          <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="Price"
-            name="Price"
-            type="number"
-            placeholder="10000"
-            value={formValues.Price ?? ""}
+            value={formValues.NameProduct ?? ""}
             onChange={handleInputChange}
           />
         </div>
         <div className="mb-6">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="Stock"
+            htmlFor="Price"
           >
-            Stock
+            Description
           </label>
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="Stock"
-            type="text"
-            name="Stock"
+            id="Price"
+            type="number"
+            name="Price"
             placeholder=""
-            value={formValues.Stock ?? " "}
+            value={formValues.Price ?? 0}
             onChange={handleInputChange}
           />
         </div>
+        <div className="mb-6">
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            htmlFor="ImagePath"
+          >
+            Description
+          </label>
+          <input
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="ImagePath"
+            type="file"
+            name="ImagePath"
+            accept="image/*"
+            placeholder=""
+            onChange={handleImageChange}
+          />
+          {formValues.ImagePath && <span>{formValues.ImagePath.name}</span>}
+        </div>
+
+        {/* Submit button */}
         <div className="flex items-center justify-between">
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="button"
             onClick={submitForm}
           >
-            Save
+            Add
           </button>
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -177,19 +211,4 @@ const CategoryPage: NextPage<ProductPageProps> = ({ product }) => {
   )
 }
 
-export default CategoryPage
-
-export const getServerSideProps: GetServerSideProps<ProductPageProps> = async ({
-  params,
-}) => {
-  const { id } = params ?? {}
-
-  const response = await fetch(`http://localhost:3000/api/product/${id}`)
-  const product = await response.json()
-
-  return {
-    props: {
-      product,
-    },
-  }
-}
+export default VariantPage

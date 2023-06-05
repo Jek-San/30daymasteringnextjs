@@ -19,7 +19,7 @@ model tblcategory {
 }
 
 model tblproduct {
-  Id          Int       @id @default(autoincrement())
+  Id          String    @id @default(uuid())
   NameProduct String?   @db.VarChar(255)
   Price       Float?    @db.Float
   Stock       String?   @db.VarChar(255)
