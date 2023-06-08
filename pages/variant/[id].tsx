@@ -5,10 +5,10 @@ import { GetServerSideProps, NextPage } from "next"
 import { useRouter } from "next/router"
 import { EventHandler, useEffect, useState } from "react"
 interface FormValues {
-  IdCategory: string | null
+  IdCategory: string | null| number
   nameVariant: string | null
   Description: string | null
-  Id: string | null
+  Id: string | null | number
 }
 interface Variant extends tblvariant {}
 interface VariantPageProps {
@@ -18,6 +18,12 @@ interface VariantPageProps {
 const CategoryPage: NextPage<VariantPageProps> = ({ variant }) => {
   const router = useRouter()
 
+  const [validateState, setValidateState] = useState({
+    IdCategory: true,
+    nameVariant: true,
+
+    Description: true,
+  })
   const [formValues, setFormValues] = useState<FormValues>({
     Id: variant.Id,
     IdCategory: variant.IdCategory,
@@ -35,7 +41,7 @@ const CategoryPage: NextPage<VariantPageProps> = ({ variant }) => {
 
   const submitForm = async (e: any) => {
     e.preventDefault()
-    console.log("test")
+
     try {
       // Make API request to create a new post using the formData
       console.log(JSON.stringify(formValues))
@@ -46,18 +52,29 @@ const CategoryPage: NextPage<VariantPageProps> = ({ variant }) => {
           "Content-Type": "application/json",
         },
       })
-      console.log(formValues)
       if (response.ok) {
-        // Handle successful form submission
+        console.log(response)
         console.log("Post Edit successfully!")
-        // Redirect or perform any necessary actions
-      } else {
-        // Handle error case
-        console.error("Failed to create post")
+        // Handle successful form submission
+          console.log("Post Edit successfully!")
+          // Redirect or perform any necessary actions
       }
+      throw new Error("Failed Edit")
+      // console.log(formValues)
+      // console.log(response)
+      // if (response.ok) {
+      //  
+      // } else if (response.status === 222) {
+      //   alert(`Is this your full name:`)
+      //   setValidateState((prevValues) => ({
+      //     ...prevValues,
+      //     nameVariant: false,
+      //   }))
+      // }
     } catch (error) {
       // Handle error case
-      console.error("Failed to create post", error)
+      alert(`Is this your error: ${error}`)
+      console.error(error)
     }
   }
 
@@ -84,6 +101,7 @@ const CategoryPage: NextPage<VariantPageProps> = ({ variant }) => {
           />
         </div>
         <div className="mb-4" hidden>
+          <span></span>
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="IdCategory"
@@ -106,6 +124,7 @@ const CategoryPage: NextPage<VariantPageProps> = ({ variant }) => {
           >
             Name Variant
           </label>
+
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="nameVariant"
@@ -115,6 +134,11 @@ const CategoryPage: NextPage<VariantPageProps> = ({ variant }) => {
             value={formValues.nameVariant ?? " "}
             onChange={handleInputChange}
           />
+          {!validateState.nameVariant ? (
+            <span className="text-red-500">Variant is exist in the DB</span>
+          ) : (
+            <div></div>
+          )}
         </div>
         <div className="mb-6">
           <label
@@ -165,7 +189,7 @@ export const getServerSideProps: GetServerSideProps<VariantPageProps> = async ({
 
   const response = await fetch(`http://localhost:3000/api/variant/${id}`)
   const variant = await response.json()
-
+  console.log("variant", variant)
   return {
     props: {
       variant,

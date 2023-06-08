@@ -12,7 +12,7 @@ export default async function handler(
     const { Id } = req.query
 
     if (Id) {
-      const variantId = String(Id)
+      const variantId = Number(Id)
 
       try {
         const variant = await prisma.tblvariant.findUnique({
@@ -38,7 +38,13 @@ export default async function handler(
   } else if (req.method === "POST") {
     try {
       const { IdCategory, NameVariant, Description } = req.body
-      const categoryId = String(IdCategory)
+      const isExist = await prisma.tblvariant.findMany({
+        where: { NameVariant: NameVariant },
+      })
+      if (isExist) {
+        res.status(200).json({ message: "NameVarint is Exist" })
+      }
+      const categoryId = Number(IdCategory)
 
       const variant = await prisma.tblvariant.create({
         data: {
@@ -58,10 +64,16 @@ export default async function handler(
   } else if (req.method === "PUT") {
     try {
       const { Id, IdCategory, nameVariant, Description } = req.body
+      const isExist = await prisma.tblvariant.findMany({
+        where: { NameVariant: nameVariant },
+      })
+      if (isExist) {
+        throw new Error("Varian has been exist")
+      }
 
       const updatedVariant = await prisma.tblvariant.update({
         where: {
-          Id: String(Id),
+          Id: Number(Id),
         },
         data: {
           IdCategory,
@@ -75,7 +87,7 @@ export default async function handler(
       res.status(200).json(updatedVariant)
     } catch (error) {
       console.error(error)
-      res.status(500).json({ message: "Internal server error" })
+      res.status(500).json(error)
     }
   } else if (req.method === "DELETE") {
     try {
@@ -85,7 +97,7 @@ export default async function handler(
 
       const deletedVariant = await prisma.tblvariant.delete({
         where: {
-          Id: String(variantId),
+          Id: Number(variantId),
         },
       })
 

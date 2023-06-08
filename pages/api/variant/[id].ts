@@ -9,11 +9,10 @@ export default async function handler(
   if (req.method === "GET") {
     // console.log("req.query", req.query)
     const { id } = req.query
-    const variantId = parseInt(id as string)
 
     try {
       const variant = await prisma.tblvariant.findUnique({
-        where: { Id: String(variantId) },
+        where: { Id: String(id) },
       })
 
       if (variant) {
