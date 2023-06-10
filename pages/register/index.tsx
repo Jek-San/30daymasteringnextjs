@@ -1,11 +1,12 @@
+import { useState } from "react"
 import axios, { AxiosError } from "axios"
 import { useRouter } from "next/router"
-import { useState } from "react"
 
-export default function Login() {
+export default function Register() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [userName, setUserName] = useState("")
+
   const router = useRouter()
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -16,20 +17,15 @@ export default function Login() {
     }
     // Perform registration logic using the API route '/api/auth/register'
     try {
-      const response = await axios.post("/api/auth/login", data)
-
-      console.log("Registration successful:", response.data.token)
-      // Assuming you have received the token as 'jwtToken'
-      localStorage.setItem("token", response.data.token)
-      sessionStorage.setItem("token", response.data.token)
-
+      const response = await axios.post("/api/auth/register", data)
+      console.log("Registration successful:", response.data)
       // Redirect or perform any other action after successful registration
-      router.push("/")
+      router.push("/login")
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError
         if (axiosError.response?.status === 409) {
-          console.log("Email or username is False")
+          console.log("Email or username already exists.")
         } else {
           console.log("Error during registration:", axiosError.message)
         }
@@ -42,7 +38,7 @@ export default function Login() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded shadow-md">
-        <h2 className="text-2xl font-bold mb-4">Login</h2>
+        <h2 className="text-2xl text-black font-bold mb-4">Register</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
