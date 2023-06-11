@@ -18,7 +18,7 @@ export default function Login() {
     try {
       const response = await axios.post("/api/auth/login", data)
 
-      console.log("Registration successful:", response.data.token)
+      console.log("Registration successful:")
       // Assuming you have received the token as 'jwtToken'
       localStorage.setItem("token", response.data.token)
       sessionStorage.setItem("token", response.data.token)

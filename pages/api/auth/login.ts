@@ -2,6 +2,10 @@ import { PrismaClient } from "@prisma/client"
 import { NextApiRequest, NextApiResponse } from "next"
 import { compare } from "bcrypt"
 import { sign } from "jsonwebtoken"
+import { SignJWT } from "jose"
+import { getJwtSecretKey } from "@/utils/auth"
+import cookie from "cookie"
+
 const prisma = new PrismaClient()
 
 //Login
@@ -22,16 +26,30 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
     }
 
     const passwordMatch = await compare(password, user.Password)
-
+    //if password donot match send message to user Invalid credential
     if (!passwordMatch) {
       return res.status(401).json({ message: "Invalid credentials" })
     }
+    //return a jwt cookie to the user
+    const token = await new SignJWT({})
+      .setProtectedHeader({
+        alg: "HS256",
+      })
+      .setJti(user.Id)
+      .setIssuedAt()
+      .setExpirationTime("1m")
+      .sign(new TextEncoder().encode(getJwtSecretKey()))
 
-    const token = sign({ userId: user.Id }, jwtScret, {
-      expiresIn: "1m",
-    })
-    console.log({ token })
-    res.status(200).json({ token })
+    //SET TOKEN COOKE AS A HEADER
+    res.setHeader(
+      "Set-Cookie",
+      cookie.serialize("token", token, {
+        httpOnly: true,
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+      })
+    )
+    res.status(200).json({ success: true })
   } catch (error) {
     console.error(error)
     res.status(500).json({ message: "Internal Server Error" })

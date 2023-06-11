@@ -1,11 +1,17 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import axios, { AxiosError } from "axios"
 import { useRouter } from "next/router"
+import { getTokenFromLocalStorage } from "@/utils/auth"
 
 export default function Register() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [userName, setUserName] = useState("")
+  useEffect(() => {
+    const token = getTokenFromLocalStorage()
+    console.log(token)
+    return () => {}
+  }, [])
 
   const router = useRouter()
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
