@@ -1,17 +1,11 @@
 import { useEffect, useState } from "react"
 import axios, { AxiosError } from "axios"
 import { useRouter } from "next/router"
-import { getTokenFromLocalStorage } from "@/utils/auth"
 
 export default function Register() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [userName, setUserName] = useState("")
-  useEffect(() => {
-    const token = getTokenFromLocalStorage()
-    console.log(token)
-    return () => {}
-  }, [])
 
   const router = useRouter()
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -28,6 +22,7 @@ export default function Register() {
       // Redirect or perform any other action after successful registration
       router.push("/login")
     } catch (error) {
+      console.log(error)
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError
         if (axiosError.response?.status === 409) {
@@ -42,7 +37,7 @@ export default function Register() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-slate-900">
       <div className="bg-white p-8 rounded shadow-md">
         <h2 className="text-2xl text-black font-bold mb-4">Register</h2>
         <form onSubmit={handleSubmit}>

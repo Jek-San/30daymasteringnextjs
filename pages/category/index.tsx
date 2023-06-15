@@ -3,21 +3,26 @@ import { GetStaticProps } from "next"
 import { FC } from "react"
 import { tblcategory } from "@prisma/client"
 import Link from "next/link"
+
 interface Category extends tblcategory {}
 interface pageProps {
   categories: Category[]
 }
 
 const page: FC<pageProps> = ({ categories }) => {
+  
   if (!categories) {
     return <div className="div">Loading...</div>
   } else {
     return (
       <>
-        <Link href="/category/create">
-          <button>Create Category</button>
-        </Link>
-        <Table url={"/category"} />
+        <div className="mt-24">
+          <Link href="/category/create" className="">
+            <button>Create Category</button>
+          </Link>
+
+          <Table url={"/category"} />
+        </div>
       </>
     )
   }

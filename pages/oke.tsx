@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react"
-import { getAllUsers } from "./api/auth/login"
+// import { getAllUsers } from "./api/auth/login"
 import { tblusers } from "@prisma/client"
 import { GetServerSideProps } from "next"
 interface User extends tblusers {}

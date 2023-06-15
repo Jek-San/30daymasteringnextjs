@@ -57,10 +57,10 @@ const CategoryPage: NextPage<CreateProps> = ({}) => {
   }
 
   return (
-    <div className="w-auto flex justify-center ">
+    <div className="flex justify-center ">
       <form
         method="PUT"
-        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+        className="justify-center bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
       >
         <div className="mb-4" hidden>
           <label

@@ -1,0 +1,13 @@
+$primary-color: powderblue;
+
+
+.containerCssOnly {
+  width: 100%;
+  .header {
+    background-color: $primary-color;
+    color: black;
+  }
+  .content {
+    padding: 20px;
+  }
+}

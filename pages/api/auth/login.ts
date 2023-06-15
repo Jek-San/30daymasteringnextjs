@@ -37,7 +37,7 @@ export default async function login(req: NextApiRequest, res: NextApiResponse) {
       })
       .setJti(user.Id)
       .setIssuedAt()
-      .setExpirationTime("1m")
+      .setExpirationTime("1h")
       .sign(new TextEncoder().encode(getJwtSecretKey()))
 
     //SET TOKEN COOKE AS A HEADER
