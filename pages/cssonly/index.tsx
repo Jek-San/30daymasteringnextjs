@@ -1,5 +1,6 @@
 import Nav from "@/component/Nav"
-import Navbar from "@/component/Navbar"
+import NavCssOnly from "@/component/NavCssOnly"
+
 import { FC } from "react"
 
 interface indexProps {}
@@ -7,7 +8,7 @@ interface indexProps {}
 const index: FC<indexProps> = ({}) => {
   return (
     <>
-      <Nav />
+      <NavCssOnly />
     </>
   )
 }

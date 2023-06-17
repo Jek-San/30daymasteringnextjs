@@ -1,11 +1,12 @@
 import Head from "next/head"
 import { FC } from "react"
-import Navbar from "./Navbar"
+
+import Nav from "./Nav"
 
 const Layout = (props: any) => {
   return (
     <>
-      <Navbar />
+      <Nav />
       <Head>
         <title>{props.title}</title>
       </Head>

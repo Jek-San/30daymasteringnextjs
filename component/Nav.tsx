@@ -10,7 +10,7 @@ const Nav = () => {
   const router = useRouter()
 
   return (
-    <nav className="bg-slate-500 bg-opacity-30 w-max-content fixed z-20 left-1/2 transform  -translate-x-1/2 top-2 flex gap-2 p-2 rounded-full backdrop-filter backdrop-blur-lg ">
+    <nav className="bg-slate-500 bg-opacity-30 w-max-content fixed z-20 left-3/4 transform  -translate-x-1/2 bottom-2 flex gap-2 p-2 rounded-full backdrop-filter backdrop-blur-lg ">
       <Link
         href={"/"}
         className={`${
@@ -29,9 +29,11 @@ const Nav = () => {
       </Link>
 
       <a
-        href="#experience"
+        href={"/frontendpractice"}
         className={`${
-          activeNav === "#experience" ? "bg-indigo-800" : "bg-transparent"
+          router.pathname === "/frontendpractice"
+            ? "bg-indigo-800"
+            : "bg-transparent"
         } p-4 rounded-full text-light text-lg`}
       >
         <BiBook />
@@ -45,7 +47,7 @@ const Nav = () => {
         <RiServiceLine />
       </a>
       <Link
-        href={"/cssonly"}
+        href={"/headlessUI"}
         className={`${
           router.pathname === "/cssonly" ? "bg-indigo-800" : "bg-transparent"
         } p-4 rounded-full text-light text-lg`}
