@@ -1,4 +1,5 @@
 import Head from "next/head"
+import Image from "next/image"
 import { FC } from "react"
 
 interface indexProps {}
@@ -63,14 +64,50 @@ const index: FC<indexProps> = ({}) => {
         </div>
       </div>
 
-      <div className="h-[120vh] w-[100vw]  grid grid-cols-3  bg-blue-500 text-black mt-[3rem] ">
+      {/* <section className=" border-2 h-screen grid grid-cols-10 grid-rows-[10]">
+        <div className="ml-20  img1 bg-teal-200 col-start-1 col-end-7 row-start-1 row-end-7  ">
+          <div className="h-screen grid grid-cols-3 grid-rows-2  ">
+            <div className="col-start-2 col-end-3 row-span-1 self-center  ">
+              <Image
+                src="/image/pexels-cottonbro-studio.jpg"
+                alt=""
+                width={200}
+                height={200}
+                className="aspect-square"
+              />
+            </div>
+            <div className="col-start-2 col-end-3 row start-2 row-end-3 self-center">
+              <Image
+                src="/image/pexels-cottonbro-studio.jpg"
+                alt=""
+                width={200}
+                height={200}
+                className="aspect-square"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="img3 bg-transparent  col-start-5 col-end-10 row-start-2 row-end-6 place-self-end self-center ">
+          <div className="    ">
+            <Image
+              src="/image/pexels-cottonbro-studio.jpg"
+              width={450}
+              height={300}
+              alt="oke"
+              className="overflow-hidden rounded-xl bg-current"
+            />
+          </div>
+        </div>
+      </section> */}
+      {/* <section className="h-[120vh] w-[100vw]  grid grid-cols-3  bg-blue-500 text-black mt-[3rem]  ">
         <div className="h-full  col-start-1 col-end-2 bg-white z-50">
           <div className=" h-[55%] translate-x-[30%] translate-y-[50%] bg-hotang bg-cover"></div>
         </div>
-        <div className="h-full col-span-2 content-center bg-red-600">
+        <div className="h-full col-span-2 content-center bg-[#fbffa7]">
           <div className=" h-[40%] z-40  bg-fcottonbro bg-cover  translate-y-[55vh] translate-x-[40vh] aspect-square"></div>
         </div>
-      </div>
+      </section> */}
     </>
   )
 }
